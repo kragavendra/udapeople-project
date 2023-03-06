@@ -267,13 +267,13 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-          #Added code here 
+            #Added code here 
             cd frontend
             npm install
       - run:
           name: Get backend url
           command: |
-          #Added code here 
+            #Added code here 
             BACKEND_PUBLIC_IP=$(aws ec2 describe-instances \
               --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
@@ -283,7 +283,7 @@ jobs:
       - run:
           name: Deploy frontend objects
           command: |
-          #Added code here 
+            #Added code here 
             cd frontend
             npm run build
             aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
@@ -312,12 +312,13 @@ jobs:
       - run:
           name: Install dependencies
           command: |
+            #Added code here 
             cd backend
             npm install
       - run:
           name: Package Backend
           command: |
-          #Added code here 
+            #Added code here 
             cd backend
             npm run build
             tar -czf artifact.tar.gz dist/* package*
@@ -326,7 +327,7 @@ jobs:
       - run:
           name: Deploy backend
           command: |
-          #Added code here 
+            #Added code here 
             export TYPEORM_MIGRATIONS_DIR=./migrations
             export TYPEORM_ENTITIES=./modules/domain/**/*.entity{.ts,.js}
             export TYPEORM_MIGRATIONS=./migrations/*.ts
@@ -347,7 +348,7 @@ jobs:
       - run:
           name: Backend smoke test.
           command: |
-          #Added code here 
+            #Added code here 
             BACKEND_PUBLIC_IP=$(aws ec2 describe-instances \
               --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
@@ -362,7 +363,7 @@ jobs:
       - run:
           name: Frontend smoke test.
           command: |
-          #Added code here 
+            #Added code here 
             FRONTEND_WEBSITE=http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website.${AWS_DEFAULT_REGION}.amazonaws.com
             if curl -s $FRONTEND_WEBSITE | grep "Welcome"
             then
