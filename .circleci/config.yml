@@ -175,7 +175,7 @@ jobs:
       - checkout
       - install_awscli
       - add_ssh_keys:
-          fingerprints: ["d9:06:93:7c:dd:ac:25:bf:3d:f3:10:f5:5d:69:f6:67"]
+          fingerprints: ["70:a6:bb:62:b2:ef:74:b9:3c:e4:8e:0d:89:b3:ca:2f"]
       - run:
           name: Ensure back-end infrastructure exists
           command: |
