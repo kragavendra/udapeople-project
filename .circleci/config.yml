@@ -49,7 +49,7 @@ commands:
             aws cloudformation delete-stack --stack-name udapeople-backend-<< parameters.Workflow_ID >>
             aws s3 rm s3://udapeople-<<parameters.Workflow_ID>> --recursive
             aws cloudformation delete-stack --stack-name udapeople-frontend-<< parameters.Workflow_ID >>
-            exit 1
+
 
   revert-migrations:
     description: Revert the last migration if successfully run in the current workflow.
@@ -61,18 +61,17 @@ commands:
     steps:
       - run:
           name: Revert migrations
-          # Add when this will run
+          when: on_fail
           command: |
-            # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
-            #SUCCESS = 1
-            #if(( $SUCCESS==1 )); 
-            #then
-            #  cd ~/project/backend
-            #  npm install
-            #  Add revert code here. You can find this in the Getting Started section.
-            #  exit 1
-            #fi
-            exit 1
+            # Added code here
+            SUCCESS=$(curl --insecure  https://kvdb.io/${KVDB_BUCKET}/migration_<< parameters.Workflow_ID >>)
+            # Logic for reverting the database state
+            if (( $SUCCESS == 1 ));
+            then
+              cd ~/project/backend
+              npm install
+              npm run migration:revert
+            fi
      
 jobs:
   build-frontend:
@@ -241,6 +240,9 @@ jobs:
             #Added code here 
             cd backend
             npm install
+            npm audit fix --force --audit-level=critical
+            npm audit fix --force --audit-level=critical
+            npm audit fix
             npm run migrations > migrations_dump.txt
       - run:
           name: Send migration status to kvdb.io
@@ -270,6 +272,8 @@ jobs:
             #Added code here 
             cd frontend
             npm install
+            npm audit fix --force --audit-level=critical
+            npm audit fix --force --audit-level=critical
       - run:
           name: Get backend url
           command: |
@@ -315,6 +319,8 @@ jobs:
             #Added code here 
             cd backend
             npm install
+            npm audit fix --force --audit-level=critical
+            npm audit fix --force --audit-level=critical
       - run:
           name: Package Backend
           command: |
