@@ -1,4 +1,6 @@
 version: 2.1
+orbs:
+  slack: circleci/slack@4.1
 
 commands:
 #added few commands for installing awscli/ansible/nodejs
@@ -151,6 +153,15 @@ jobs:
             npm audit fix --force --audit-level=critical
             npm audit fix --force --audit-level=critical
             npm audit --audit-level=critical
+      - slack/notify:
+          channel: #udapeople-alerts
+          event: fail
+          mentions: '@EngineeringTeam'
+          template: basic_fail_1
+      - slack/notify:
+          channel: #udapeople-alerts
+          event: pass
+          template: success_tagged_deploy_1
   scan-backend:
     docker:
       - image: cimg/node:13.8.0
