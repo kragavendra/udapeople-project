@@ -76,11 +76,11 @@ commands:
 jobs:
   build-frontend:
     docker:
-      - image: circleci/node:13.8.0
+      - image: cimg/node:13.8.0
     steps:
       - checkout
       - restore_cache:
-          keys: [frontend-build]
+          keys: [frontend-deps]
       - run:
           name: Build front-end
           command: |
@@ -90,11 +90,11 @@ jobs:
             npm run build
       - save_cache:
           paths: [frontend/node_modules]
-          key: frontend-build
+          key: frontend-deps
 
   build-backend:
     docker:
-      - image: circleci/node:13.8.0
+      - image: cimg/node:13.8.0
     steps:
       - checkout
       - restore_cache:
@@ -108,7 +108,7 @@ jobs:
             npm run build
       - save_cache:
           paths: [backend/node_modules]
-          key: backend-build
+          key: backend-deps
 
   test-frontend:
     docker:
@@ -235,13 +235,6 @@ jobs:
       - checkout
       - install_awscli
       - run:
-          name: Create environment varibales
-          command: |
-            echo -e "NODE_ENV=local\nVERSION=1\nTYPEORM_CONNECTION=${TYPEORM_CONNECTION}\nTYPEORM_MIGRATIONS_DIR=${TYPEORM_MIGRATIONS_DIR}\nTYPEORM_ENTITIES=${TYPEORM_ENTITIES}\nTYPEORM_MIGRATIONS=${TYPEORM_MIGRATIONS}\nTYPEORM_HOST=${TYPEORM_HOST}\nTYPEORM_PORT=${TYPEORM_PORT}\nTYPEORM_USERNAME=${TYPEORM_USERNAME}\nTYPEORM_PASSWORD=${TYPEORM_PASSWORD}\nTYPEORM_DATABASE=${TYPEORM_DATABASE}" >> backend/.env
-            cat backend/.env
-      - restore_cache:
-          keys: [backend-deps]
-      - run:
           name: Run migrations
           command: |
             #Added code here 
@@ -337,12 +330,8 @@ jobs:
             cd backend
             npm run build
             tar -czf artifact.tar.gz dist/* package*
-            ls -ltr
             cd ..
-            ls -ltr
-            pwd
-            cp backend/artifact.tar.gz /home/circleci/project/.circleci/ansible/roles/deploy/tasks/files
-            find . -name 'artifact.tar.gz'
+            cp backend/artifact.tar.gz .circleci/ansible/roles/deploy/files
       - run:
           name: Deploy backend
           command: |
@@ -352,7 +341,6 @@ jobs:
             export TYPEORM_MIGRATIONS=./migrations/*.ts
             cd .circleci/ansible
             cat inventory.txt
-            find . -name 'artifact.tar.gz'
             ansible-playbook -i inventory.txt deploy-backend.yml
       # Here's where you will add some code to rollback on failure  
       - destroy-environment
@@ -379,7 +367,7 @@ jobs:
             then
               exit 0
             else
-              exit 0
+              exit 1
             fi
       - run:
           name: Frontend smoke test.
@@ -390,7 +378,7 @@ jobs:
             then
               exit 0
             else
-              exit 0
+              exit 1
             fi
 
       # Here's where you will add some code to rollback on failure 
