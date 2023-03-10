@@ -340,7 +340,7 @@ jobs:
             ls -ltr
             cd ..
             ls -ltr
-            cp backend/artifact.tar.gz /home/circleci/project/.circleci/ansible/roles/deploy/tasks/files/
+            cp backend/artifact.tar.gz /home/circleci/project/.circleci/ansible/roles/deploy/tasks/files
             find . -name 'artifact.tar.gz'
       - run:
           name: Deploy backend
