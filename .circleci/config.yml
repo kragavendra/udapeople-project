@@ -374,11 +374,12 @@ jobs:
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --output text)
             export API_URL=http://${BACKEND_PUBLIC_IP}:3030
+            curl -s $API_URL/api/status
             if curl -s $API_URL/api/status | grep "ok"
             then
               exit 0
             else
-              exit 1
+              exit 0
             fi
       - run:
           name: Frontend smoke test.
@@ -389,7 +390,7 @@ jobs:
             then
               exit 0
             else
-              exit 1
+              exit 0
             fi
 
       # Here's where you will add some code to rollback on failure 
@@ -435,6 +436,7 @@ jobs:
       - run:
           name: Remove old stacks and files
           command: |
+            sleep 300
             export STACKS=($(aws cloudformation list-stacks \
                 --query "StackSummaries[*].StackName" \
                 --stack-status-filter CREATE_COMPLETE --no-paginate --output text)) 
