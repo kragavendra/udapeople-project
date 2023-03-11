@@ -9,7 +9,7 @@
 - name: "Copy Artifact"
   become: true
   copy:
-    src: ~/project/artifact.tar.gz
+    src: /home/circleci/project/.circleci/ansible/roles/deploy/files/artifact.tar.gz
     dest: /home/ubuntu/web/artifact.tar.gz
 
 
