@@ -3,12 +3,14 @@ https://github.com/kragavendra/udapeople-project
 
 URL02 - Evidence of deployed and functioning front-end application in an S3 bucket
 http://udapeople-a47bdac.s3-website.us-west-2.amazonaws.com/#/employees
+http://udapeople-7e712be.s3-website.us-west-2.amazonaws.com/#/employees -> latest url (had to redeploy the code, because of Udacity lab account timeout)
 
 URL03 - Evidence of deployed and functioning front-end application in CloudFront
 http://d2x8pfkcki112h.cloudfront.net/#/employees
 
 URL04 - Evidence of healthy back-end application
 http://18.236.74.154:3030/api/status
+http://34.218.246.95:3030/api/status -> latest url (had to redeploy the code, because of Udacity lab account timeout)
 
 URL05 - Evidence of Prometheus Server
 http://ec2-34-221-147-218.us-west-2.compute.amazonaws.com:9090/targets
